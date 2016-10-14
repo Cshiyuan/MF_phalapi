@@ -9,8 +9,11 @@
 class Api_User extends PhalApi_Api
 {
 
-
-    public function getBaseInfo()
+    /**
+     * 获得用户的基本信息
+     * @desc 通过UID获得用户的基本信息
+     */
+    public function getUserBaseInfo()
     {
         $rs = array('code' => 0, 'msg' => '', 'info' => array());
 

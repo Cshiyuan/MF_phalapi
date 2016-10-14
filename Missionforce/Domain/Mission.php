@@ -13,4 +13,21 @@ class Domain_Mission
         $rs = $model->getMissionByUID($UID);
         return $rs;
     }
+
+    public function getMissionByMID($MID)
+    {
+        $model = new Model_Mission();
+        $rs = $model->getMissionByMID($MID);
+
+        return $rs;
+    }
+
+    public function changeMissionTime($MID,$TIME)
+    {
+        $model = new Model_Mission();
+        $rs = $model->changeMissionTime($MID,$TIME);
+
+        return $rs;
+    }
+
 }

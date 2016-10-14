@@ -10,13 +10,14 @@ class Api_Default extends PhalApi_Api {
 	public function getRules() {
         return array(
             'index' => array(
-                'username' 	=> array('name' => 'username', 'default' => 'PHPer', ),
+                'username' 	=> array('name' => 'username', 'default' => 'Admin', ),
             ),
         );
 	}
 	
 	/**
 	 * 默认接口服务
+	 * @desc 测试接口状态
 	 * @return string title 标题
 	 * @return string content 内容
 	 * @return string version 版本，格式：X.X.X

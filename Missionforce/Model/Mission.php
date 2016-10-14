@@ -22,5 +22,22 @@ class Model_Mission
         return $data;
     }
 
+    public function getMissionByMID($MID)
+    {
+        $sql = 'select * from mf_mission left join mf_group on mf_mission.GID=mf_group.GID where mf_mission.MID = :MID';
+        $params = array(':MID' => $MID);
+        $data = DI()->notorm->mission->queryAll($sql,$params);  //根据UID查询到相应的Misson
+        return $data;
+    }
+
+
+    public function changeMissionTime($MID,$TIME)
+    {
+       // $data = DI()->notorm->mission->select('*')->where('UID', $UID)->fetchAll();
+        $params = array('mission_time'=>$TIME);
+        $data = DI()->notorm->mission->where('MID',$MID)->update($params);
+        return $data;
+    }
+
   //  public function
 }
