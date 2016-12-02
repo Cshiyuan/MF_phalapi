@@ -75,9 +75,8 @@ class Api_User extends PhalApi_Api
     public function getRules()
     {
         return array(
-            'getBaseInfo' => array(
+            'getUserBaseInfo' => array(
                 'userid' => array('name' => 'userid', 'type' => 'int', 'min' => 1, 'require' => true),
-                //  'username' => array('name' => 'username'),
             ),
 
             'registerUser' => array(

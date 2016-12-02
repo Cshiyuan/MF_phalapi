@@ -9,20 +9,50 @@ class Model_Group
 {
     public function createGroup($UID,$GROUPNAME,$GROUPDESCRIPTION)
     {
-//        $sql = 'select * from tbl_user where id = :id';
-//        $params = array(':id' => $this->id);                 //替换:id为请求参数的id
-//        DI()->notorm->user->queryAll($sql, $params);
-////        select * from mf_mission left join mf_group on mf_mission.GID=mf_group.GID where mf_mission.UID = 2
-//        //return DI()->notorm->user->select('UID,username,email')->where('UID = ?', $userId)->fetch();
-//        // $data = DI()->notorm->mission->select('*')->where('UID', $UID)->fetchAll();  //根据UID查询到相应的Misson
-//        $sql = 'select * from mf_mission left join mf_group on mf_mission.GID=mf_group.GID where mf_mission.UID = :id';
-//        $params = array(':id' => $UID);
-//        $data = DI()->notorm->mission->queryAll($sql, $params);  //根据UID查询到相应的Misson
-//        return $data;
         $group = DI()->notorm->group;
         $data = array('group_leader' => $UID,'group_name'=>$GROUPNAME,'group_description'=>$GROUPDESCRIPTION);
         $group->insert($data);
         $id = $group->insert_id(); //必须是同一个实例，方能获取到新插入的行ID，且表必须设置了自增
+
+        $userAndGroup = DI()->notorm->userandgroup;
+        $relation = array('UID' => $UID, 'GID' => $id);
+        $userAndGroup->insert($relation);
+
+        return $id;   //返回的是创建的GID的主键
+    }
+
+    public function getGroupByGID($GID)
+    {
+        return DI()->notorm->group->select('GID,group_name,group_leader,group_description')->where('GID = ?', $GID)->fetch();
+    }
+
+    public function getGroupByUID($UID)
+    {
+        $sql = 'select * from mf_userandgroup left join mf_group on mf_group.GID=mf_userandgroup.GID where mf_userandgroup.UID = :id';
+        $params = array(':id' => $UID);
+        $data = DI()->notorm->group->queryAll($sql,$params);  //根据UID查询到相应的Misson
+        return $data;
+    }
+
+    public function addUserToGroup($UID, $GID)
+    {
+        $userandgroup = DI()->notorm->userandgroup;
+        $data = array('UID' => $UID,'GID' => $GID);
+        $userandgroup->insert($data);
+        $id = $userandgroup->insert_id(); //必须是同一个实例，方能获取到新插入的行ID，且表必须设置了自增
         return $id;
     }
+
+    public function addAssignMissionToUser($UID, $GID, $mission_name, $mission_time,
+                                           $mission_deadline, $mission_description)
+    {
+        $mission = DI()->notorm->mission;
+        $data = array('UID' => $UID,'GID' => $GID, 'mission_name' => $mission_name,
+                      'mission_time' => $mission_time, 'mission_deadline'=>$mission_deadline,
+                      'mission_description' => $mission_description);
+        $mission->insert($data);
+        $id = $mission->insert_id(); //必须是同一个实例，方能获取到新插入的行ID，且表必须设置了自增
+        return $id;
+    }
+
 }

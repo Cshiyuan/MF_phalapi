@@ -11,8 +11,8 @@ return array(
         'db_missionforce' => array(                         //服务器标记
             'host'      => 'localhost',             //数据库域名
             'name'      => 'missionforce_api',               //数据库名字
-            'user'      => 'root',                  //数据库用户名
-            'password'  => '',	                    //数据库密码
+            'user'      => 'admin',                  //数据库用户名
+            'password'  => '123456',	                    //数据库密码
             'port'      => '3306',                  //数据库端口
             'charset'   => 'UTF8',                  //数据库字符集
         ),
