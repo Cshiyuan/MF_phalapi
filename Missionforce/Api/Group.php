@@ -15,9 +15,9 @@ class Api_Group extends PhalApi_Api
     {
         $rs = array('code' => 0, 'msg' => '', 'info' => array());  //初始化$rs
         $domain = new Domain_Group();
-        $result = $domain->createGroup($this->UID,$this->groupName,$this->groupDescription); //交由domain注册并返回注册信息
-        $rs['code'] =200;
-        $rs['msg']='创建成功';
+        $result = $domain->createGroup($this->UID, $this->groupName, $this->groupDescription); //交由domain注册并返回注册信息
+        $rs['code'] = 200;
+        $rs['msg'] = '创建成功';
         $rs['info'] = $result;
         return $rs;
 
@@ -40,7 +40,7 @@ class Api_Group extends PhalApi_Api
         if ($result == null) {
             $rs['code'] = 400;
             $rs['msg'] = 'Group';
-        }else {
+        } else {
             $rs['code'] = 200;
             $rs['msg'] = '查询成功';
             $rs['info'] = $result;
@@ -61,7 +61,7 @@ class Api_Group extends PhalApi_Api
         if ($result == null) {
             $rs['code'] = 400;
             $rs['msg'] = 'Group';
-        }else {
+        } else {
             $rs['code'] = 200;
             $rs['msg'] = '查询成功';
             $rs['info'] = $result;
@@ -82,9 +82,30 @@ class Api_Group extends PhalApi_Api
         if ($result == null) {
             $rs['code'] = 400;
             $rs['msg'] = 'Group';
-        }else {
+        } else {
             $rs['code'] = 200;
             $rs['msg'] = '添加成功';
+            $rs['info'] = $result;
+        }
+        return $rs;
+    }
+
+    /**
+     * 从小组删除成员
+     * @desc 从小组删除成员，通过UID和GID
+     */
+    public function deleteUserFormGroup()
+    {
+        $rs = array('code' => 0, 'msg' => '', 'info' => array());  //初始化$rs
+        $domain = new Domain_Group();
+        $result = $domain->deleteUserFormGroup($this->UID, $this->GID); //交由domain注册并返回注册信息
+
+        if ($result == null) {
+            $rs['code'] = 400;
+            $rs['msg'] = 'Group';
+        } else {
+            $rs['code'] = 200;
+            $rs['msg'] = '删除成功';
             $rs['info'] = $result;
         }
         return $rs;
@@ -99,15 +120,96 @@ class Api_Group extends PhalApi_Api
         $rs = array('code' => 0, 'msg' => '', 'info' => array());  //初始化$rs
         $domain = new Domain_Group();
         $result = $domain->addAssignMissionToUser($this->UID, $this->GID,
-                                                  $this->mission_name, $this->mission_time,
-                                                  $this->mission_deadline, $this->mission_description);
+            $this->mission_name, $this->mission_time,
+            $this->mission_deadline, $this->mission_description);
 
         if ($result == null) {
             $rs['code'] = 400;
             $rs['msg'] = 'Group';
-        }else {
+        } else {
             $rs['code'] = 200;
             $rs['msg'] = '添加成功';
+            $rs['info'] = $result;
+        }
+        return $rs;
+    }
+
+    /**
+     * 在小组里发布投票
+     * @desc 在小组里发布投票
+     */
+    public function addVote()
+    {
+        $rs = array('code' => 0, 'msg' => '', 'info' => array());  //初始化$rs
+        $domain = new Domain_Group();
+        $result = $domain->addVote($this->GID, $this->ThemeName, $this->Options);
+
+        if ($result == null) {
+            $rs['code'] = 400;
+            $rs['msg'] = 'Group';
+        } else {
+            $rs['code'] = 200;
+            $rs['msg'] = '添加成功';
+            $rs['info'] = $result;
+        }
+        return $rs;
+    }
+
+    /**
+     * 获取小组所有的投票主题
+     * @desc 通过GID获取小组所有的投票主题
+     */
+    public function getVoteThemeByGID()
+    {
+        $rs = array('code' => 0, 'msg' => '', 'info' => array());  //初始化$rs
+        $domain = new Domain_Group();
+        $result = $domain->getVoteThemeByGID($this->GID);
+        if ($result == null) {
+            $rs['code'] = 400;
+            $rs['msg'] = 'Vote';
+        } else {
+            $rs['code'] = 200;
+            $rs['msg'] = '查询成功';
+            $rs['info'] = $result;
+        }
+        return $rs;
+    }
+
+    /**
+     * 获取投票的所有投票选项
+     * @desc 通过TID获取投票的所有投票选项
+     */
+    public function getVoteOptionsByTID()
+    {
+        $rs = array('code' => 0, 'msg' => '', 'info' => array());  //初始化$rs
+        $domain = new Domain_Group();
+        $result = $domain->getVoteOptionsByTID($this->TID);
+        if ($result == null) {
+            $rs['code'] = 400;
+            $rs['msg'] = 'Vote';
+        } else {
+            $rs['code'] = 200;
+            $rs['msg'] = '查询成功';
+            $rs['info'] = $result;
+        }
+        return $rs;
+    }
+
+    /**
+     * 用户进行投票
+     * @desc 通过UID和OID进行投票
+     */
+    public function userVoteToOption()
+    {
+        $rs = array('code' => 0, 'msg' => '', 'info' => array());  //初始化$rs
+        $domain = new Domain_Group();
+        $result = $domain->userVoteToOption($this->UID, $this->OID);
+        if ($result == null) {
+            $rs['code'] = 400;
+            $rs['msg'] = 'Vote';
+        } else {
+            $rs['code'] = 200;
+            $rs['msg'] = '查询成功';
             $rs['info'] = $result;
         }
         return $rs;
@@ -133,6 +235,10 @@ class Api_Group extends PhalApi_Api
                 'UID' => array('name' => 'UID', 'type' => 'int', 'min' => 1, 'require' => true),
                 'GID' => array('name' => 'GID', 'type' => 'int', 'min' => 1, 'require' => true),
             ),
+            'deleteUserFormGroup' => array(
+                'UID' => array('name' => 'UID', 'type' => 'int', 'min' => 1, 'require' => true),
+                'GID' => array('name' => 'GID', 'type' => 'int', 'min' => 1, 'require' => true),
+            ),
             'addAssignMissionToUser' => array(
                 'UID' => array('name' => 'UID', 'type' => 'int', 'min' => 1, 'require' => true),
                 'GID' => array('name' => 'GID', 'type' => 'int', 'min' => 1, 'require' => true),
@@ -140,8 +246,22 @@ class Api_Group extends PhalApi_Api
                 'mission_time' => array('name' => 'mission_time', 'type' => 'int', 'min' => 0, 'require' => true),
                 'mission_deadline' => array('name' => 'mission_deadline', 'type' => 'date', 'require' => true),
                 'mission_description' => array('name' => 'mission_description', 'require' => true),
+            ),
+            'addVote' => array(
+                'GID' => array('name' => 'GID', 'type' => 'int', 'min' => 1, 'require' => true),
+                'ThemeName' => array('name' => 'ThemeName','require' => true),
+                'Options' => array('name' => 'Options', 'type' => 'array', 'format' => 'explode', 'separator' => ',', 'require' => true),
+            ),
+            'getVoteThemeByGID' => array(
+                'GID' => array('name' => 'GID', 'type' => 'int', 'min' => 1, 'require' => true),
+            ),
+            'getVoteOptionsByTID' => array(
+                'TID' => array('name' => 'TID', 'type' => 'int', 'min' => 1, 'require' => true),
+            ),
+            'userVoteToOption' => array(
+                'UID' => array('name' => 'UID', 'type' => 'int', 'min' => 1, 'require' => true),
+                'OID' => array('name' => 'OID', 'type' => 'int', 'min' => 1, 'require' => true),
             )
-
         );
     }
 

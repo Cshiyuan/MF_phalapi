@@ -54,7 +54,6 @@ class Api_User extends PhalApi_Api
 
     }
 
-
     /**
      * 通过邮箱和密码进行登陆认证
      * @desc 通过邮箱和密码进行登陆认证
@@ -91,6 +90,11 @@ class Api_User extends PhalApi_Api
             ),
         );
     }
+
+    /**
+     * 修改用户简介
+     * @desc 通过UID修改用户简介
+     */
 
 
 }

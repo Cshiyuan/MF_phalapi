@@ -14,6 +14,7 @@ class Model_Group
         $group->insert($data);
         $id = $group->insert_id(); //必须是同一个实例，方能获取到新插入的行ID，且表必须设置了自增
 
+        //同时插入到联系表
         $userAndGroup = DI()->notorm->userandgroup;
         $relation = array('UID' => $UID, 'GID' => $id);
         $userAndGroup->insert($relation);
@@ -43,6 +44,16 @@ class Model_Group
         return $id;
     }
 
+    public function deleteUserFormGroup($UID, $GID)
+    {
+        $where = array('UID' => $UID,'GID' => $GID);
+
+        if(DI()->notorm->userandgroup->where($where)->delete() == 1)
+            return '删除成功';
+        else
+            return null;
+    }
+
     public function addAssignMissionToUser($UID, $GID, $mission_name, $mission_time,
                                            $mission_deadline, $mission_description)
     {
@@ -53,6 +64,63 @@ class Model_Group
         $mission->insert($data);
         $id = $mission->insert_id(); //必须是同一个实例，方能获取到新插入的行ID，且表必须设置了自增
         return $id;
+    }
+
+    public function addVote($GID, $Themename, $Options)
+    {
+
+        $Theme = DI()->notorm->theme;
+        $data = array('GID' => $GID,'ThemeName'=>$Themename);
+        $Theme->insert($data);
+        $TID = $Theme->insert_id(); //必须是同一个实例，方能获取到新插入的行ID，且表必须设置了自增
+
+        //获取了TID
+        for ($i = 0; $i < count($Options); $i++){
+            $option= $Options[$i];
+            $optionData = array('TID' => $TID, 'OptionName' => $option);
+            DI()->notorm->option->insert($optionData);
+        }
+
+        return $TID;
+    }
+
+    public function getVoteThemeByGID($GID)
+    {
+        return DI()->notorm->theme->select('*')->where('GID = ?', $GID)->fetch();
+    }
+
+    public function getVoteOptionsByTID($TID)
+    {
+        return DI()->notorm->option->select('*')->where('TID = ?', $TID)->fetchAll();
+    }
+
+    public function userVoteToOption($UID, $OID)
+    {
+        $where = array('UID' => $UID,'OID' => $OID);
+
+//        if(DI()->notorm->userandgroup->where($where)->delete() == 1)
+        $isVoted = DI()->notorm->userandoption->select('ChoiceBool')->where($where)->count('ChoiceBool');
+//        var_dump($isVoted);
+        if($isVoted)
+        {
+            return '已经投过票啦。';
+        }
+        else  //没有投票
+        {
+            DI()->notorm->userandoption->insert($where); //插入
+
+            $VoteNumberArray = DI()->notorm->option->select('VoteNumber')->where('OID = ?', $OID)->fetch();
+
+            $VoteNumber = $VoteNumberArray['VoteNumber'];
+
+            $VoteNumber++;
+            $data = array('VoteNumber' => $VoteNumber);
+            $rs = DI()->notorm->option->where('OID', $OID)->update($data);
+            if ($rs == null)
+                return '投票失败';
+            else
+                return $rs;
+        }
     }
 
 }

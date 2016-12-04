@@ -35,6 +35,13 @@ class Domain_Group
         return $rs;
     }
 
+    public function deleteUserFormGroup($UID, $GID)
+    {
+        $model = new Model_Group();
+        $rs = $model->deleteUserFormGroup($UID, $GID);
+        return $rs;
+    }
+
     public function addAssignMissionToUser($UID, $GID, $mission_name, $mission_time,
                                            $mission_deadline, $mission_description)
     {
@@ -43,5 +50,34 @@ class Domain_Group
             $mission_deadline, $mission_description);
         return $rs;
     }
+
+    public function addVote($GID, $Themename, $Options)
+    {
+        $model = new Model_Group();
+        $rs = $model->addVote($GID, $Themename, $Options);
+        return $rs;
+    }
+
+    public function getVoteThemeByGID($GID)
+    {
+        $model = new Model_Group();
+        $rs = $model->getVoteThemeByGID($GID);
+        return $rs;
+    }
+
+    public function getVoteOptionsByTID($TID)
+    {
+        $model = new Model_Group();
+        $rs = $model->getVoteOptionsByTID($TID);
+        return $rs;
+    }
+
+    public function userVoteToOption($UID, $OID)
+    {
+        $model = new Model_Group();
+        $rs = $model->userVoteToOption($UID, $OID);
+        return $rs;
+    }
+
 
 }
