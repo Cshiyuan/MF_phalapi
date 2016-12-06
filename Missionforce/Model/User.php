@@ -10,7 +10,7 @@ class Model_User
 {
     public function getByUserId($userId)
     {
-        return DI()->notorm->user->select('UID,username,email')->where('UID = ?', $userId)->fetch();
+        return DI()->notorm->user->select('UID,username,email,introduction')->where('UID = ?', $userId)->fetch();
     }
 
     public function registerUser($username, $password, $email)
@@ -70,13 +70,24 @@ class Model_User
     }
 
 
+    public function changeUserInformation($UID, $username, $introduction)
+    {
+
+
+        $date = array('username' => $username, 'introduction' => $introduction);
+        $rs = DI()->notorm->user->where('UID',$UID)->update($date);
+        return $rs;
+    }
+
+
+
+
     /**
      * Encrypting password
      * @param password
      * returns salt and encrypted password
      */
-    public
-    function hashSSHA($password)
+    public function hashSSHA($password)
     {
         $salt = sha1(rand());
         $salt = substr($salt, 0, 10);
@@ -90,8 +101,7 @@ class Model_User
      * @param salt , password
      * returns hash string
      */
-    public
-    function checkhashSSHA($salt, $password)
+    public function checkhashSSHA($salt, $password)
     {
         $hash = base64_encode(sha1($password . $salt, true) . $salt);
         return $hash;
@@ -100,8 +110,7 @@ class Model_User
     /**
      * 检查用户是否存在
      */
-    public
-    function isUserExisted($email)
+    public function isUserExisted($email)
     {
 
         $num = DI()->notorm->user->select('email')->where('email', $email)->count();;
@@ -113,5 +122,7 @@ class Model_User
             return false;
         }
     }
+
+
 
 }

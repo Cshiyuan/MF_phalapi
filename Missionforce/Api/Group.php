@@ -215,6 +215,26 @@ class Api_Group extends PhalApi_Api
         return $rs;
     }
 
+    /**
+     * 通过GID查找小组里的组员
+     * @desc 通过GID查找小组里的组员
+     */
+    public function getUsersByGID()
+    {
+        $rs = array('code' => 0, 'msg' => '', 'info' => array());  //初始化$rs
+        $domain = new Domain_Group();
+        $result = $domain->getUsersByGID($this->GID);
+        if ($result == null) {
+            $rs['code'] = 400;
+            $rs['msg'] = 'Vote';
+        } else {
+            $rs['code'] = 200;
+            $rs['msg'] = '查询成功';
+            $rs['info'] = $result;
+        }
+        return $rs;
+    }
+
 
     public function getRules()
     {
@@ -261,7 +281,10 @@ class Api_Group extends PhalApi_Api
             'userVoteToOption' => array(
                 'UID' => array('name' => 'UID', 'type' => 'int', 'min' => 1, 'require' => true),
                 'OID' => array('name' => 'OID', 'type' => 'int', 'min' => 1, 'require' => true),
-            )
+            ),
+            'getUsersByGID' => array(
+                'GID' => array('name' => 'GID', 'type' => 'int', 'min' => 1, 'require' => true),
+            ),
         );
     }
 

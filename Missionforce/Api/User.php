@@ -70,6 +70,25 @@ class Api_User extends PhalApi_Api
         return $rs;
     }
 
+    /**
+     * 修改用户简介
+     * @desc 通过UID修改用户简介
+     */
+    public function changeUserInformation()
+    {
+        $rs = array('code' => 0, 'msg' => '', 'info' => array());  //初始化$rs
+        $domain = new Domain_User();
+        $result = $domain->changeUserInformation($this->UID, $this->username, $this->introduction);
+        if ($result == null) {
+            $rs['code'] = 400;
+            $rs['msg'] = 'User';
+        } else {
+            $rs['code'] = 200;
+            $rs['msg'] = '修改成功';
+            $rs['info'] = $result;
+        }
+        return $rs;
+    }
 
     public function getRules()
     {
@@ -88,13 +107,14 @@ class Api_User extends PhalApi_Api
                 'email' => array('name' => 'email','require' => true),
                 'password' => array('name' => 'password','require' => true),
             ),
+            'changeUserInformation' => array(
+                'UID' => array('name' => 'UID', 'type' => 'int', 'min' => 1, 'require' => true),
+                'username' => array('name' => 'username','require' => true),
+                'introduction' => array('name' => 'introduction','require' => true),
+            ),
         );
     }
 
-    /**
-     * 修改用户简介
-     * @desc 通过UID修改用户简介
-     */
 
 
 }

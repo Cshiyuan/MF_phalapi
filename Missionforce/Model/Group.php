@@ -123,4 +123,18 @@ class Model_Group
         }
     }
 
+    public function getUsersByGID($GID)
+    {
+        $rs = array();
+        $userandgroup = DI()->notorm->userandgroup;
+        $UIDS = $userandgroup->select('UID')->where('GID = ?',$GID)->fetchAll();
+        for($i = 0; $i <count($UIDS) ;$i++)
+        {
+//            var_dump($UIDS[$i]['UID']);
+           $userInformation =  DI()->notorm->user->select('UID,username,email,introduction')->where('UID = ?', $UIDS[$i]['UID'])->fetch();
+//            var_dump($userInformation);
+            $rs[$i] = $userInformation;
+        }
+        return $rs;
+    }
 }

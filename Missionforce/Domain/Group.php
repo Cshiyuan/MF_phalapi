@@ -79,5 +79,11 @@ class Domain_Group
         return $rs;
     }
 
+    public function getUsersByGID($GID)
+    {
+        $model = new Model_Group();
+        $rs = $model->getUsersByGID($GID);
+        return $rs;
+    }
 
 }

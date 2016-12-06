@@ -34,4 +34,13 @@ class Domain_User
         $rs = $model->loginUser($email,$password);
         return $rs;
     }
+
+    public function changeUserInformation($UID, $username, $introduction)
+    {
+
+
+        $model = new Model_User();
+        $rs = $model->changeUserInformation($UID, $username, $introduction);
+        return $rs;
+    }
 }
