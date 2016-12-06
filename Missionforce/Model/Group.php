@@ -44,6 +44,21 @@ class Model_Group
         return $id;
     }
 
+
+    public function addUserToGroupByEmail($GID, $email)
+    {
+//        $rs = null;
+        $userandgroup = DI()->notorm->user;
+        $UID = $userandgroup->select('UID')->where('email = ?',$email)->fetch();
+
+        if($UID == null)
+            return null;
+//        var_dump($UID['UID']);
+
+        return $this->addUserToGroup($UID['UID'],$GID);
+    }
+
+
     public function deleteUserFormGroup($UID, $GID)
     {
         $where = array('UID' => $UID,'GID' => $GID);
@@ -137,4 +152,6 @@ class Model_Group
         }
         return $rs;
     }
+
+
 }

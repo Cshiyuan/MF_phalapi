@@ -235,6 +235,27 @@ class Api_Group extends PhalApi_Api
         return $rs;
     }
 
+    /**
+     * 通过Email向小组里的添加组员
+     * @desc 通过Email向小组里的添加组员
+     */
+    public function addUserToGroupByEmail()
+    {
+        $rs = array('code' => 0, 'msg' => '', 'info' => array());  //初始化$rs
+        $domain = new Domain_Group();
+        $result = $domain->addUserToGroupByEmail($this->GID, $this->email);
+        if ($result == null) {
+            $rs['code'] = 400;
+            $rs['msg'] = 'addUser';
+        } else {
+            $rs['code'] = 200;
+            $rs['msg'] = '添加成功';
+            $rs['info'] = $result;
+        }
+        return $rs;
+    }
+
+
 
     public function getRules()
     {
@@ -254,6 +275,10 @@ class Api_Group extends PhalApi_Api
             'addUserToGroup' => array(
                 'UID' => array('name' => 'UID', 'type' => 'int', 'min' => 1, 'require' => true),
                 'GID' => array('name' => 'GID', 'type' => 'int', 'min' => 1, 'require' => true),
+            ),
+            'addUserToGroupByEmail' => array(
+                'GID' => array('name' => 'GID', 'type' => 'int', 'min' => 1, 'require' => true),
+                'email' => array('name' => 'email','require' => true),
             ),
             'deleteUserFormGroup' => array(
                 'UID' => array('name' => 'UID', 'type' => 'int', 'min' => 1, 'require' => true),
@@ -285,6 +310,7 @@ class Api_Group extends PhalApi_Api
             'getUsersByGID' => array(
                 'GID' => array('name' => 'GID', 'type' => 'int', 'min' => 1, 'require' => true),
             ),
+
         );
     }
 

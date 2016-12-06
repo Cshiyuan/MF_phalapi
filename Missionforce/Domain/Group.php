@@ -86,4 +86,11 @@ class Domain_Group
         return $rs;
     }
 
+    public function addUserToGroupByEmail($GID, $email)
+    {
+        $model = new Model_Group();
+        $rs = $model->addUserToGroupByEmail($GID, $email);
+        return $rs;
+    }
+
 }
