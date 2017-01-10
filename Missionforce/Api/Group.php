@@ -134,7 +134,7 @@ class Api_Group extends PhalApi_Api
         return $rs;
     }
 
-    /**
+     /**
      * 在小组里发布投票
      * @desc 在小组里发布投票
      */
